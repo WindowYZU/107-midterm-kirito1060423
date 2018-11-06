@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 import javafx.scene.AccessibleAttribute;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
+import javax.swing.JComboBox;
 import javax.swing.ProgressMonitor;
 import javax.swing.SwingUtilities;
 
@@ -99,9 +100,12 @@ public class NewJFrame extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         try {
-            jButton1.setEnabled(false);
+            jButton1.setEnabled(true);
             //從 combobox 抓出被選到的項目，存到變數裡
+            JComboBox<String> comboBox=new JComboBox<String>();
             String selectedItem="";
+            selectedItem=""+jComboBox1.getSelectedItem();
+            
             /////////////////////////////////////
             URL url = new URL(selectedItem);
             String fileName = url.getFile();
@@ -115,10 +119,12 @@ public class NewJFrame extends javax.swing.JFrame {
                 public void totalBytesDownloaded(long bytes, boolean finished, boolean failed) {
                     //implement this
                     if (finished) {
-                        progress.setVisible(false);
+                        progress.setVisible(true);
                         jButton1.setEnabled(true);
                         //將下載好的項目加入到 jList 裡面
-                        
+                        DefaultListModel model=(DefaultListModel) jList1.getModel();
+                        model.addElement(url);
+                        jList1.updateUI();
                         ////////////////////////////
                         SwingUtilities.invokeLater(new Runnable() {
                             @Override
@@ -127,7 +133,9 @@ public class NewJFrame extends javax.swing.JFrame {
                                     URL fileURL=tempFile.toURI().toURL();
                                     //利用 fileURL 將 image icon 加到 jLabel2
                                     ////////////////////////////////////////
-                                    jList1.updateUI();
+                                    ImageIcon icon=new ImageIcon(fileURL);
+                                    jLabel2.setIcon(icon);
+                                    //jLabel2.updateUI();
                                 } catch (Exception ex) {
                                     Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE, null, ex);
                                 }
@@ -180,6 +188,7 @@ public class NewJFrame extends javax.swing.JFrame {
                 new NewJFrame().setVisible(true);
             }
         });
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
